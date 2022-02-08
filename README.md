@@ -1,9 +1,4 @@
-- target format parquet
-- first date for the report as input
-- auto-detection of the file to be processed
-- ready-to-production in python
-
-
+## Overall
 
 Code repository on github with python and docker -> docker image repository (dockerhub) -> image pulled from orchestration tool (apache airflow or flows for kubernetes) -> execution platform (kubernetes platform) with docker container, within we have configs and secrets -> orchestration will extract from source bucket, process and report on S3 target
 
@@ -219,3 +214,51 @@ config file (ini, json, yaml)
 To import the package from everywhere in the system
 add the project folder to pythonpath
 export PYTHONPATH="... xetra"
+
+## Clean code
+
+Write pythonic (Dunder methods, Context managers, decorators, comprehensions)
+
+## Unit testing
+
+Use pytest: test each callable method
+Goal: 100% test coverage
+
+use fake or in-memory db to test database connections, or `moto` to mock S3
+
+```bash
+pipenv install coverage
+coverage run -m unittest discover -v
+```
+
+```
+coverage report -m
+
+Name                                           Stmts   Miss  Cover   Missing
+----------------------------------------------------------------------------
+tests/__init__.py                                  0      0   100%
+tests/common/__init__.py                           0      0   100%
+tests/common/test_meta_process.py                117      1    99%   327
+tests/common/test_s3.py                          109      1    99%   244
+tests/integration_test/__init__.py                 0      0   100%
+tests/transformers/__init__.py                     0      0   100%
+tests/transformers/test_xetra_transformer.py     132      1    99%   297
+xetra/__init__.py                                  0      0   100%
+xetra/common/__init__.py                           0      0   100%
+xetra/common/constants.py                         10      0   100%
+xetra/common/custom_exceptions.py                  2      0   100%
+xetra/common/meta_process.py                      40      0   100%
+xetra/common/s3.py                                41      0   100%
+xetra/transformers/__init__.py                     0      0   100%
+xetra/transformers/xetra_transformer.py           75      0   100%
+----------------------------------------------------------------------------
+TOTAL                                            526      3    99%
+
+```
+
+
+## Integration testing 
+ Test how all the components work together, using real aws instead of mock
+
+
+ create 2 buckets for test (src and trg)

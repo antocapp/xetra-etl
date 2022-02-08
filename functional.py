@@ -28,7 +28,7 @@ def write_df_to_s3_csv(bucket, df, key):
     bucket.put_object(Body=out_buffer.getvalue(), Key=key)
     return True
 
-## Application layer - not core
+## META layer - not core
 
 def return_date_list(bucket, arg_date, src_format, meta_key):
     min_date = datetime.strptime(arg_date, src_format).date() - timedelta(days=1)
